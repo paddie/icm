@@ -53,6 +53,13 @@ func main() {
 	}
 }
 ```
+### Output
+```
+DIM: (300,300)
+Before 1 iterations: E: -195150
+After  1 iterations: E: -238352
+Time: 25 Milliseconds
+```
 
 ### TODO:
 - Convert into library
