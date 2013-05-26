@@ -62,5 +62,4 @@ Time: 25 Milliseconds
 ```
 
 ### TODO:
-- Convert into library
 - Instead of iterations argument, make a stopping criteria 
