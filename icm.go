@@ -159,11 +159,11 @@ func (u *UGM) E() float64 {
 	for x, row := range u.image {
 		for y, node := range row {
 			beta_sum := 0
-			right := u.Right(x, y)
+			right := u.right(x, y)
 			if right != nil {
 				beta_sum += node.X() * right.X()
 			}
-			down := u.Down(x, y)
+			down := u.down(x, y)
 			if down != nil {
 				beta_sum += node.X() * down.X()
 			}
@@ -228,7 +228,7 @@ func (u *UGM) WriteToFile(path string, img image.Image) {
 
 	// write png to file
 	if err := png.Encode(imgFile, newImg); err != nil {
-		fmt.Prinln(err)
+		fmt.Println(err)
 		os.Exit(1)
 	}
 }
