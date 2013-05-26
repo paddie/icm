@@ -22,7 +22,7 @@ func TestICM(t *testing.T) {
 	}
 
 	// use these H, Beta, Eta values
-	h, b, e := 0.0, 1.0, 1.0
+	h, b, e := 0.1, 1.0, .5
 
 	// instantiate Unidirectional Graphical Model
 	u := NewUGM(img, h, b, e)
@@ -39,8 +39,6 @@ func TestICM(t *testing.T) {
 	}
 
 	total := time.Now().Sub(begin).Nanoseconds()
-	// total := end - begin
-	// fmt.Printf("%d - %d = %d", end, begin, total)
 
 	fmt.Printf("-----------------------\nTime: %4d Milliseconds\n", total/1e6)
 }

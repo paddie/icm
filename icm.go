@@ -87,31 +87,30 @@ func (u *UGM) getNode(x, y int) *Node {
 	}
 
 	return u.image[x][y]
-
 }
 
-func (u *UGM) Left(x, y int) *Node {
+func (u *UGM) left(x, y int) *Node {
 	if y <= 0 {
 		return nil
 	}
 	return u.image[x][y-1]
 }
 
-func (u *UGM) Right(x, y int) *Node {
+func (u *UGM) right(x, y int) *Node {
 	if y >= len(u.image[0])-1 {
 		return nil
 	}
 	return u.image[x][y+1]
 }
 
-func (u *UGM) Up(x, y int) *Node {
+func (u *UGM) up(x, y int) *Node {
 	if x <= 0 {
 		return nil
 	}
 	return u.image[x-1][y]
 }
 
-func (u *UGM) Down(x, y int) *Node {
+func (u *UGM) down(x, y int) *Node {
 	if x >= len(u.image)-1 {
 		return nil
 	}
@@ -122,19 +121,19 @@ func (u *UGM) neighbours(x, y int) []*Node {
 
 	neighbours := make([]*Node, 0, 4)
 
-	xj := u.Up(x, y)
+	xj := u.up(x, y)
 	if xj != nil {
 		neighbours = append(neighbours, xj)
 	}
-	xj = u.Left(x, y)
+	xj = u.left(x, y)
 	if xj != nil {
 		neighbours = append(neighbours, xj)
 	}
-	xj = u.Right(x, y)
+	xj = u.right(x, y)
 	if xj != nil {
 		neighbours = append(neighbours, xj)
 	}
-	xj = u.Down(x, y)
+	xj = u.down(x, y)
 	if xj != nil {
 		neighbours = append(neighbours, xj)
 	}
@@ -152,9 +151,9 @@ func (u *UGM) Y() int {
 	return len(u.image[0])
 }
 
-// We run through the materix and calculate the H and Eta terms
+// We run through the matrix and calculate the H and Eta terms
 // as in the ICM, but we only sum up the nodes to the right and below
-// each node, so as to prevent counting edges twice in the summation
+// each node, so as to prevent counting edges twice
 func (u *UGM) E() float64 {
 	E := 0.0
 	for x, row := range u.image {
@@ -197,8 +196,6 @@ func (u *UGM) ICM(iter int) {
 				E_minus := u.h*-1 - u.beta*float64(beta_minus) - u.eta*float64(eta_minus)
 				E_plus := u.h*1 - u.beta*float64(beta_plus) - u.eta*float64(eta_plus)
 
-				// fmt.Printf("(%3d,%3d) plus: %1f vs. %1f minus\n", x, y, E_plus, E_minus)
-
 				if E_minus < E_plus {
 					node.Set(-1)
 				} else {
@@ -210,7 +207,7 @@ func (u *UGM) ICM(iter int) {
 }
 
 func (u *UGM) WriteToFile(path string, img image.Image) {
-	// make new file
+	// create in memory image based on ICM results matrix
 	newImg := image.NewGray16(img.Bounds())
 	for x := 0; x < u.X(); x++ {
 		for y := 0; y < u.Y(); y++ {
@@ -221,7 +218,7 @@ func (u *UGM) WriteToFile(path string, img image.Image) {
 			}
 		}
 	}
-	// create/overwrite file
+	// create/overwrite file to write to
 	imgFile, err := os.Create(path)
 	if err != nil {
 		fmt.Printf("%v", err)
@@ -231,7 +228,7 @@ func (u *UGM) WriteToFile(path string, img image.Image) {
 
 	// write png to file
 	if err := png.Encode(imgFile, newImg); err != nil {
-		fmt.Printf("%v", err)
+		fmt.Prinln(err)
 		os.Exit(1)
 	}
 }
